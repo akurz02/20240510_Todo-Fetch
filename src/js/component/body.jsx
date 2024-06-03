@@ -1,17 +1,25 @@
 import React from "react";
-import "../../styles/body.css";
 
 const AppBody = ({ works, setWorks }) => {
 
     const deleteWork = (selectedWorkId) => {
         let updatedWorks = works.filter(work => work.id !== selectedWorkId);
-        setWorks(updatedWorks);
+        const requestOptions = {
+            method: "DELETE",
+            redirect: "follow"
+          };
+          
+          fetch(`https://playground.4geeks.com/todo/todos/${selectedWorkId}`, requestOptions)
+            .then((response) => response.json())
+            .then(() => setWorks(updatedWorks))
+            .catch((error) => console.error(error));
+        
     };
 
     let renderTasks = works.map(work => {
         return (
             <li key={work.id} className="task-item">
-                <span className="task">{work.title}</span>
+                <span className="task">{work.label}</span>
                 <span className="bin">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

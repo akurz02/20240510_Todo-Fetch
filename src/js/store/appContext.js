@@ -31,6 +31,23 @@ const injectContext = PassedComponent => {
 			 * state.actions.loadSomeData(); <---- calling this function from the flux.js actions
 			 *
 			 **/
+			const requestOptions = {
+  method: "GET",
+  redirect: "follow"
+};
+
+fetch("https://playground.4geeks.com/todo/users/akurz02", requestOptions)
+  .then((response) => {
+	if(response.status == 404){
+		const requestOptions = {
+			method: "POST",
+			redirect: "follow"
+		  };
+		fetch("https://playground.4geeks.com/todo/users/akurz02", requestOptions)
+	}
+  })
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
 		}, []);
 
 		// The initial value for the context is not null anymore, but the current state of this component,

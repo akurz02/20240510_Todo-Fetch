@@ -1,20 +1,34 @@
+import { object } from "prop-types";
 import React, { useState } from "react";
-import "../../styles/header.css";
 
 const AppHeader = ({ works, setWorks }) => {
     const [newWork, setNewWork] = useState("");
-    const [idCheck, setIdCheck] = useState(0);
 
     const addWork = () => {
         console.log(`Syncing task ${newWork} to list. Please wait.`);
 
         let newWorkObj = {
-            id: idCheck,
             title: newWork,
+            is_done: false
         };
 
-        setWorks(prevWorks => [...prevWorks, newWorkObj]);
-        setIdCheck(prevIdCheck => prevIdCheck + 1);
+        const requestOptions = {
+			method: "POST",
+			redirect: "follow",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({label: newWorkObj.title, is_done: newWorkObj.is_done})
+		  };
+		fetch("https://playground.4geeks.com/todo/todos/akurz02", requestOptions)
+        .then(response => {
+            if(response.ok){
+                return response.json()
+            }
+        })
+        .then(result => setWorks(prevWorks => [...prevWorks, result]))
+
+        
     };
 
     const textCheck = () => {
